@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inferno · Canto I · in terzine</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#2b1d12; --parch:#f1e4c3; --edge:#c9ab72; --red:#8b1e1e; }
+  * { box-sizing:border-box; }
+  html,body { height:100%; }
+  body {
+    margin:0; display:flex; flex-direction:column; align-items:center;
+    background:#3a2a1c radial-gradient(circle at 50% 0%, #5a4029, #1a120b 80%);
+    font-family:'IM Fell English', Georgia, serif; color:var(--ink);
+  }
+  header { text-align:center; padding:14px 10px 6px; color:#efe4c8; }
+  header h1 { font-family:'UnifrakturMaguntia', serif; font-weight:normal; font-size:clamp(1.6rem,4vw,2.4rem); margin:0; color:#e8c66a; }
+  header p { margin:2px 0 0; font-style:italic; opacity:.8; }
+  .stage { flex:1; width:100%; max-width:980px; padding:10px 16px; display:flex; align-items:center; }
+  .slide {
+    width:100%; padding:24px 28px 22px;
+    background:var(--parch);
+    background-image:radial-gradient(ellipse at 20% 10%, rgba(255,255,255,.35), transparent 60%),radial-gradient(ellipse at 80% 90%, rgba(140,100,40,.25), transparent 60%);
+    border:2px solid var(--edge); border-radius:4px;
+    box-shadow:0 0 0 7px #e6d3a6, 0 0 0 9px var(--edge), 0 20px 60px rgba(0,0,0,.6), inset 0 0 80px rgba(120,80,30,.3);
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .slide.out { opacity:0; transform:translateY(8px); }
+  .tag { text-align:center; color:var(--red); letter-spacing:.18em; font-size:.85rem; margin-bottom:10px; }
+  .pic { display:flex; gap:8px; justify-content:center; }
+  .pic svg { width:100%; max-height:46vh; height:auto; border:3px double var(--ink); border-radius:2px; display:block; }
+  .pic.tri svg { width:33%; }
+  .verses { margin:18px auto 0; max-width:640px; font-size:clamp(1.15rem,2.4vw,1.55rem); line-height:1.5; }
+  .verse { display:flex; gap:14px; padding:2px 10px; border-radius:6px; transition:background .25s, color .25s; }
+  .verse .num { width:2.2em; text-align:right; color:var(--red); opacity:.6; font-size:.7em; padding-top:.45em; flex:none; }
+  .verse.on { background:rgba(139,30,30,.12); color:#5a0e0e; }
+  .verse:first-child .txt::first-letter { font-family:'UnifrakturMaguntia', serif; color:var(--red); font-size:1.35em; }
+  .bar { width:100%; max-width:980px; padding:6px 16px 18px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center; color:#efe4c8; }
+  button, select { font-family:inherit; font-size:1rem; border:1px solid var(--edge); background:#f1e4c3; color:var(--ink); border-radius:6px; padding:7px 14px; cursor:pointer; }
+  button:hover { background:#fff3d6; }
+  button.primary { background:var(--red); color:#f7f0d8; border-color:#5a0e0e; }
+  button.primary:hover { background:#a52626; }
+  button.toggle.on { background:#e8c66a; }
+  select { max-width:220px; padding:6px 8px; }
+  .count { min-width:72px; text-align:center; }
+  .progress { width:100%; max-width:980px; height:4px; background:rgba(255,255,255,.12); }
+  .progress div { height:100%; background:#e8c66a; width:0; transition:width .3s; }
+  label.rate { display:flex; align-items:center; gap:6px; font-size:.95rem; }
+  .note { font-size:.85rem; opacity:.7; text-align:center; width:100%; }
+  @media (max-width:640px){ .slide{padding:16px 12px;} .pic.tri{flex-direction:column;} .pic.tri svg{width:100%; max-height:22vh;} }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="g-morning" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3c79a"/><stop offset="1" stop-color="#f8e6c0"/></linearGradient>
+    <linearGradient id="g-day" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcd6e0"/><stop offset="1" stop-color="#f6e8c4"/></linearGradient>
+    <linearGradient id="g-dawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2a3a"/><stop offset=".7" stop-color="#c98a6a"/><stop offset="1" stop-color="#e9b872"/></linearGradient>
+    <linearGradient id="g-dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a3a"/><stop offset="1" stop-color="#9a6a4a"/></linearGradient>
+    <linearGradient id="g-dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0705"/><stop offset="1" stop-color="#2a1e14"/></linearGradient>
+    <linearGradient id="g-storm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3c3a35"/><stop offset="1" stop-color="#7a5a3a"/></linearGradient>
+    <linearGradient id="g-desert" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9b872"/><stop offset="1" stop-color="#f6e2b4"/></linearGradient>
+    <linearGradient id="g-room" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a120b"/><stop offset="1" stop-color="#3a2a1c"/></linearGradient>
+    <linearGradient id="g-fire" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1010"/><stop offset="1" stop-color="#c0602b"/></linearGradient>
+    <linearGradient id="g-hell" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0505"/><stop offset="1" stop-color="#8b1e1e"/></linearGradient>
+    <linearGradient id="g-heaven" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8e0"/><stop offset="1" stop-color="#f3d68a"/></linearGradient>
+    <linearGradient id="g-sunset" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e98a5a"/><stop offset="1" stop-color="#f6d08a"/></linearGradient>
+    <linearGradient id="g-hope" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d0a08"/><stop offset=".6" stop-color="#3a2a1c"/><stop offset="1" stop-color="#f6c453"/></linearGradient>
+    <linearGradient id="g-hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8c66a"/><stop offset=".35" stop-color="#8a9a50"/><stop offset="1" stop-color="#3e4a28"/></linearGradient>
+    <linearGradient id="g-shadeL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".85"/><stop offset=".6" stop-color="#000" stop-opacity="0"/></linearGradient>
+  </defs>
+</svg>
+
+<template id="old0"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cielo1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e9b872"/><stop offset="1" stop-color="#f6e2b4"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="260" fill="url(#cielo1)"/>
+        <circle cx="300" cy="80" r="26" fill="#f7d58a" opacity=".9"/>
+        <path d="M0 160 Q100 130 200 150 T400 140 V260 H0Z" fill="#a98b55"/>
+        <path d="M0 185 Q120 165 240 180 T400 175 V260 H0Z" fill="#8a6f3e"/>
+        <!-- strada -->
+        <path d="M150 260 L190 152 L210 152 L270 260Z" fill="#d9c08a" stroke="#5c4422" stroke-width="1.5"/>
+        <path d="M200 160 L200 172 M201 185 L202 200 M204 215 L206 235" stroke="#5c4422" stroke-width="2" stroke-dasharray="4 6"/>
+        <!-- personaggio incappucciato -->
+        <g transform="translate(205 150)">
+          <ellipse cx="0" cy="58" rx="22" ry="5" fill="#000" opacity=".25"/>
+          <path d="M-20 56 L-14 0 Q0 -12 14 0 L20 56Z" fill="#7a1616" stroke="#2b1d12" stroke-width="1.5"/>
+          <path d="M-12 2 Q0 -36 12 2 Q0 -6 -12 2Z" fill="#7a1616" stroke="#2b1d12" stroke-width="1.5"/>
+          <ellipse cx="0" cy="-8" rx="7" ry="9" fill="#1a110a"/>
+          <line x1="20" y1="10" x2="28" y2="60" stroke="#4a3220" stroke-width="3"/>
+        </g>
+      </svg></template>
+<template id="old1"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="260" fill="#1f2a1e"/>
+        <g id="bosco">
+          <!-- fila di fondo -->
+          <g fill="#2f4030">
+            <path d="M10 260 L40 60 L70 260Z"/><path d="M60 260 L95 40 L130 260Z"/><path d="M120 260 L150 70 L180 260Z"/>
+            <path d="M170 260 L205 30 L240 260Z"/><path d="M230 260 L262 60 L294 260Z"/><path d="M285 260 L320 45 L355 260Z"/>
+            <path d="M340 260 L372 70 L404 260Z"/>
+          </g>
+          <!-- fila centrale -->
+          <g fill="#223322">
+            <path d="M-10 260 L25 90 L60 260Z"/><path d="M45 260 L80 80 L115 260Z"/><path d="M100 260 L138 95 L176 260Z"/>
+            <path d="M160 260 L198 75 L236 260Z"/><path d="M220 260 L255 100 L290 260Z"/><path d="M275 260 L312 85 L349 260Z"/>
+            <path d="M330 260 L368 95 L406 260Z"/>
+          </g>
+          <!-- tronchi in primo piano -->
+          <g fill="#1a110a">
+            <rect x="20" y="0" width="22" height="260"/><rect x="118" y="0" width="16" height="260"/>
+            <rect x="250" y="0" width="26" height="260"/><rect x="345" y="0" width="18" height="260"/>
+            <path d="M42 70 Q70 60 95 30 L98 34 Q72 70 42 82Z"/>
+            <path d="M250 110 Q220 90 200 60 L204 57 Q228 86 250 98Z"/>
+            <path d="M363 150 Q385 130 400 120 L400 128 Q385 140 363 162Z"/>
+          </g>
+          <g fill="#152015">
+            <path d="M0 230 Q30 205 60 230 Q90 200 120 232 Q160 205 200 232 Q240 200 280 230 Q320 205 360 230 Q385 210 400 225 V260 H0Z"/>
+          </g>
+        </g>
+        <!-- piccola figura smarrita -->
+        <g transform="translate(190 200)">
+          <path d="M-6 30 L-4 6 Q0 0 4 6 L6 30Z" fill="#7a1616"/>
+          <circle cx="0" cy="0" r="5" fill="#7a1616"/>
+        </g>
+        <circle cx="160" cy="140" r="1.6" fill="#e8d36a"/><circle cx="166" cy="140" r="1.6" fill="#e8d36a"/>
+      </svg></template>
+<template id="old2"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="svanire" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#d9c08a" stop-opacity="1"/>
+            <stop offset=".55" stop-color="#d9c08a" stop-opacity=".5"/>
+            <stop offset="1" stop-color="#d9c08a" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="nebbia" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3c3a35"/><stop offset=".6" stop-color="#6b6658"/><stop offset="1" stop-color="#2a2a22"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="260" fill="url(#nebbia)"/>
+        <path d="M0 150 H400 V260 H0Z" fill="#2c3526"/>
+        <!-- via dritta -->
+        <path d="M150 260 L196 40 L204 40 L250 260Z" fill="url(#svanire)"/>
+        <!-- frammenti che si sgretolano -->
+        <g fill="#d9c08a">
+          <rect x="190" y="70" width="5" height="5" opacity=".35"/><rect x="206" y="58" width="4" height="4" opacity=".25"/>
+          <rect x="183" y="95" width="6" height="6" opacity=".45"/><rect x="214" y="82" width="5" height="5" opacity=".3"/>
+          <rect x="224" y="105" width="4" height="4" opacity=".4"/>
+        </g>
+        <!-- nebbia che copre -->
+        <g fill="#8c8676" opacity=".55">
+          <ellipse cx="120" cy="110" rx="120" ry="18"/><ellipse cx="290" cy="95" rx="130" ry="16"/>
+          <ellipse cx="200" cy="70" rx="160" ry="14" opacity=".8"/>
+        </g>
+        <!-- alberi ai lati -->
+        <g fill="#141a12">
+          <path d="M0 260 L30 100 L60 260Z"/><path d="M40 260 L75 120 L110 260Z"/>
+          <path d="M290 260 L325 115 L360 260Z"/><path d="M340 260 L372 95 L404 260Z"/>
+        </g>
+        <text x="200" y="45" text-anchor="middle" font-family="IM Fell English" font-size="22" fill="#d9c08a" opacity=".25">?</text>
+      </svg></template>
+<template id="old3"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="260" fill="#2a1e14"/>
+        <!-- lume di candela -->
+        <circle cx="120" cy="120" r="110" fill="#e9b872" opacity=".18"/>
+        <circle cx="120" cy="120" r="60" fill="#e9b872" opacity=".2"/>
+        <!-- tavolo -->
+        <rect x="0" y="190" width="400" height="70" fill="#4a3220"/>
+        <rect x="0" y="186" width="400" height="6" fill="#6b4a2c"/>
+        <!-- candela -->
+        <rect x="112" y="140" width="16" height="48" fill="#efe4c8"/>
+        <path d="M120 112 Q128 126 120 138 Q112 126 120 112Z" fill="#f6c453"/>
+        <path d="M120 120 Q124 128 120 136 Q116 128 120 120Z" fill="#fff3c4"/>
+        <!-- pergamena con righe cancellate -->
+        <g transform="rotate(-6 210 205)">
+          <rect x="160" y="172" width="110" height="34" fill="#f1e4c3"/>
+          <line x1="168" y1="182" x2="250" y2="182" stroke="#2b1d12" stroke-width="1.5"/>
+          <line x1="168" y1="190" x2="230" y2="190" stroke="#2b1d12" stroke-width="1.5"/>
+          <line x1="166" y1="186" x2="252" y2="180" stroke="#8b1e1e" stroke-width="2"/>
+          <line x1="168" y1="198" x2="210" y2="198" stroke="#2b1d12" stroke-width="1.5"/>
+          <line x1="165" y1="200" x2="232" y2="192" stroke="#8b1e1e" stroke-width="2"/>
+        </g>
+        <!-- poeta con il capo chino -->
+        <g transform="translate(300 100)">
+          <path d="M-40 90 Q-45 30 -5 20 Q35 30 40 90Z" fill="#7a1616" stroke="#1a110a" stroke-width="1.5"/>
+          <!-- testa con cappuccio dantesco -->
+          <path d="M-26 8 Q-28 -30 0 -32 Q26 -30 22 4 Q8 12 -26 8Z" fill="#7a1616" stroke="#1a110a" stroke-width="1.5"/>
+          <path d="M-18 4 Q-22 -16 -4 -20 Q10 -18 8 2Z" fill="#d9b48a"/>
+          <path d="M-20 -6 Q-30 -8 -26 2" fill="#d9b48a"/>
+          <!-- corona d'alloro -->
+          <path d="M-24 -18 Q0 -26 22 -18" stroke="#4b6b2a" stroke-width="4" fill="none" stroke-dasharray="5 2"/>
+          <!-- mano sulla fronte -->
+          <path d="M-30 40 Q-40 10 -16 -4" stroke="#7a1616" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <circle cx="-16" cy="-4" r="6" fill="#d9b48a"/>
+          <!-- penna -->
+          <path d="M-60 88 L-90 60" stroke="#efe4c8" stroke-width="2"/>
+          <path d="M-90 60 Q-100 44 -84 50Z" fill="#efe4c8"/>
+        </g>
+      </svg></template>
+<template id="old4"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="260" fill="#161c15"/>
+        <!-- luna velata -->
+        <circle cx="330" cy="50" r="22" fill="#bfb89a" opacity=".5"/>
+        <!-- rocce aspre -->
+        <path d="M0 260 L0 200 L40 170 L70 195 L110 150 L150 190 L190 160 L230 200 L280 145 L320 185 L360 160 L400 190 V260Z" fill="#2e2a24" stroke="#0e0b08" stroke-width="2"/>
+        <!-- alberi contorti -->
+        <g stroke="#0e0b08" stroke-linecap="round" fill="none">
+          <path d="M60 260 Q50 180 80 140 Q100 110 70 70 Q60 50 80 20" stroke-width="12"/>
+          <path d="M80 140 Q120 130 140 95" stroke-width="6"/>
+          <path d="M70 70 Q40 60 25 35" stroke-width="5"/>
+          <path d="M140 95 Q150 80 170 82 M140 95 Q135 75 148 60" stroke-width="3"/>
+          <path d="M210 260 Q230 190 200 150 Q180 120 210 80 Q225 60 205 25" stroke-width="14"/>
+          <path d="M200 150 Q160 140 140 160" stroke-width="6"/>
+          <path d="M210 80 Q250 70 270 40 M270 40 Q285 35 290 20 M270 40 Q260 25 265 10" stroke-width="4"/>
+          <path d="M340 260 Q330 200 355 160 Q370 130 345 95 Q330 75 350 40" stroke-width="11"/>
+          <path d="M345 95 Q310 85 295 60" stroke-width="5"/>
+          <path d="M355 160 Q385 150 400 130" stroke-width="5"/>
+        </g>
+        <!-- rovi e spine -->
+        <g stroke="#3d2a1c" stroke-width="2" fill="none">
+          <path d="M0 235 Q30 215 55 238 Q80 212 110 236 Q140 214 170 237 Q200 214 230 236 Q260 214 290 238 Q320 216 350 236 Q375 218 400 232"/>
+          <path d="M10 250 Q45 228 80 252 Q120 226 160 250 Q200 228 240 250 Q280 228 320 250 Q360 228 400 248"/>
+        </g>
+        <g fill="#3d2a1c">
+          <path d="M30 222 l-4 -8 l7 5Z"/><path d="M95 224 l3 -9 l3 8Z"/><path d="M155 226 l-3 -9 l7 6Z"/>
+          <path d="M215 224 l3 -9 l3 8Z"/><path d="M275 226 l-4 -8 l7 5Z"/><path d="M335 224 l3 -9 l3 8Z"/>
+        </g>
+        <!-- foglie scure appuntite -->
+        <g fill="#24331f">
+          <path d="M20 30 l10 -14 l4 16Z"/><path d="M150 55 l12 -10 l0 16Z"/><path d="M265 8 l8 -8 l4 12Z"/>
+          <path d="M290 18 l12 -6 l-2 12Z"/><path d="M296 55 l-10 -10 l14 0Z"/><path d="M168 78 l12 -4 l-6 10Z"/>
+        </g>
+        <!-- vento -->
+        <g stroke="#bfb89a" stroke-width="1.2" fill="none" opacity=".35">
+          <path d="M100 40 Q140 30 180 42"/><path d="M230 120 Q270 110 310 122"/><path d="M20 120 Q50 112 80 122"/>
+        </g>
+      </svg></template>
+<template id="old5"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="buio" cx="50%" cy="60%" r="60%">
+            <stop offset="0" stop-color="#3a2a1c"/><stop offset="1" stop-color="#0a0705"/>
+          </radialGradient>
+        </defs>
+        <rect width="400" height="260" fill="url(#buio)"/>
+        <!-- occhi nel buio -->
+        <g fill="#e8d36a">
+          <ellipse cx="50" cy="60" rx="5" ry="2.5"/><ellipse cx="66" cy="60" rx="5" ry="2.5"/>
+          <ellipse cx="330" cy="45" rx="5" ry="2.5"/><ellipse cx="346" cy="45" rx="5" ry="2.5"/>
+          <ellipse cx="355" cy="170" rx="4" ry="2"/><ellipse cx="368" cy="170" rx="4" ry="2"/>
+        </g>
+        <g fill="#c0392b">
+          <ellipse cx="40" cy="180" rx="4" ry="2"/><ellipse cx="54" cy="180" rx="4" ry="2"/>
+          <ellipse cx="270" cy="25" rx="3.5" ry="2"/><ellipse cx="282" cy="25" rx="3.5" ry="2"/>
+        </g>
+        <!-- ombre artigliate che si allungano -->
+        <g fill="#000" opacity=".7">
+          <path d="M0 0 Q80 60 120 140 L110 145 Q70 70 0 20Z"/>
+          <path d="M400 0 Q310 70 280 140 L292 145 Q320 80 400 22Z"/>
+          <path d="M0 260 Q70 210 140 215 L138 225 Q70 222 0 260Z"/>
+          <path d="M400 260 Q330 210 262 215 L264 225 Q330 222 400 260Z"/>
+        </g>
+        <!-- il poeta rannicchiato -->
+        <g transform="translate(200 150)">
+          <ellipse cx="0" cy="62" rx="40" ry="6" fill="#000" opacity=".5"/>
+          <path d="M-32 60 Q-36 10 0 0 Q36 10 32 60Z" fill="#7a1616" stroke="#1a110a" stroke-width="1.5"/>
+          <path d="M-18 4 Q-20 -30 0 -32 Q20 -30 18 4 Q0 10 -18 4Z" fill="#7a1616" stroke="#1a110a" stroke-width="1.5"/>
+          <!-- mani sul volto -->
+          <ellipse cx="-6" cy="-10" rx="7" ry="9" fill="#d9b48a"/>
+          <ellipse cx="7" cy="-10" rx="7" ry="9" fill="#d9b48a"/>
+          <!-- linee di tremore -->
+          <g stroke="#efe4c8" stroke-width="1.5" fill="none" opacity=".7">
+            <path d="M-42 -10 q-4 6 0 12 q4 6 0 12"/><path d="M42 -10 q4 6 0 12 q-4 6 0 12"/>
+            <path d="M-50 20 q-4 6 0 12"/><path d="M50 20 q4 6 0 12"/>
+          </g>
+        </g>
+        <!-- nuvola di pensiero con la selva dentro -->
+        <g transform="translate(200 60)">
+          <circle cx="-14" cy="58" r="4" fill="#efe4c8" opacity=".75"/>
+          <circle cx="-8" cy="44" r="6" fill="#efe4c8" opacity=".8"/>
+          <path d="M-60 20 Q-70 -6 -44 -10 Q-40 -34 -12 -28 Q6 -44 28 -28 Q56 -32 58 -6 Q76 10 52 26 Q40 40 14 32 Q-10 44 -30 32 Q-62 38 -60 20Z" fill="#efe4c8" stroke="#2b1d12" stroke-width="1.5"/>
+          <g fill="#1f2a1e">
+            <path d="M-40 26 L-30 -8 L-20 26Z"/><path d="M-24 28 L-12 -16 L0 28Z"/><path d="M-4 28 L8 -12 L20 28Z"/>
+            <path d="M16 26 L28 -6 L40 26Z"/><path d="M34 24 L44 0 L52 24Z"/>
+          </g>
+        </g>
+      </svg></template>
+<template id="old6"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="dueMeta" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#0d0a08"/><stop offset=".55" stop-color="#2a1e14"/><stop offset="1" stop-color="#6b5a35"/>
+          </linearGradient>
+          <radialGradient id="luceBene" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#fff3c4"/><stop offset=".4" stop-color="#f6c453" stop-opacity=".7"/><stop offset="1" stop-color="#f6c453" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="400" height="260" fill="url(#dueMeta)"/>
+        <!-- la Morte a sinistra -->
+        <g transform="translate(90 130)" opacity=".85">
+          <path d="M-40 130 Q-46 10 0 -10 Q46 10 40 130Z" fill="#000"/>
+          <path d="M-22 -2 Q-26 -50 0 -54 Q26 -50 22 -2Z" fill="#000"/>
+          <ellipse cx="-6" cy="-28" rx="4" ry="5" fill="#bfb89a" opacity=".5"/>
+          <ellipse cx="7" cy="-28" rx="4" ry="5" fill="#bfb89a" opacity=".5"/>
+          <line x1="44" y1="-80" x2="40" y2="130" stroke="#3a2a1c" stroke-width="4"/>
+          <path d="M44 -80 Q0 -96 -30 -60 Q4 -78 42 -68Z" fill="#9c9a90"/>
+        </g>
+        <!-- calice amaro -->
+        <g transform="translate(200 175)">
+          <path d="M-22 -40 Q-22 0 0 6 Q22 0 22 -40Z" fill="#5c4422" stroke="#c9ab72" stroke-width="2"/>
+          <ellipse cx="0" cy="-40" rx="22" ry="5" fill="#2b4a1e"/>
+          <rect x="-3" y="6" width="6" height="22" fill="#c9ab72"/>
+          <ellipse cx="0" cy="30" rx="16" ry="4" fill="#c9ab72"/>
+        </g>
+        <!-- il bene trovato: luce e fiore -->
+        <circle cx="320" cy="140" r="70" fill="url(#luceBene)"/>
+        <g transform="translate(320 150)">
+          <path d="M0 70 Q-4 30 0 0" stroke="#4b6b2a" stroke-width="4" fill="none"/>
+          <path d="M0 40 Q-20 30 -24 40 Q-12 48 0 40Z" fill="#4b6b2a"/>
+          <g fill="#f7f0d8" stroke="#c9ab72">
+            <ellipse cx="0" cy="-12" rx="6" ry="11"/><ellipse cx="0" cy="12" rx="6" ry="11"/>
+            <ellipse cx="-12" cy="0" rx="11" ry="6"/><ellipse cx="12" cy="0" rx="11" ry="6"/>
+          </g>
+          <circle r="6" fill="#f6c453"/>
+        </g>
+      </svg></template>
+<template id="old7"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="260" fill="#1c2233"/>
+        <!-- luna e stelle -->
+        <circle cx="80" cy="55" r="24" fill="#efe4c8"/><circle cx="92" cy="48" r="22" fill="#1c2233"/>
+        <g fill="#efe4c8"><circle cx="160" cy="30" r="1.5"/><circle cx="240" cy="50" r="1.2"/><circle cx="300" cy="25" r="1.6"/><circle cx="350" cy="70" r="1.2"/><circle cx="30" cy="110" r="1.2"/></g>
+        <path d="M0 170 Q200 150 400 170 V260 H0Z" fill="#2a3326"/>
+        <!-- bivio: via verace (dritta, luminosa) e sentiero verso il bosco -->
+        <path d="M170 260 L195 170 L205 170 L240 260Z" fill="#d9c08a" opacity=".85"/>
+        <path d="M200 225 Q150 200 90 180 L80 186 Q140 210 185 240Z" fill="#6b5a35"/>
+        <!-- bosco a sinistra -->
+        <g fill="#0f150f">
+          <path d="M0 200 L25 100 L50 200Z"/><path d="M30 195 L60 90 L90 195Z"/><path d="M70 190 L95 110 L120 190Z"/>
+        </g>
+        <!-- viandante assonnato che va verso il bosco -->
+        <g transform="translate(125 190) rotate(-8)">
+          <path d="M-12 34 L-8 4 Q0 -4 8 4 L12 34Z" fill="#7a1616" stroke="#1a110a"/>
+          <circle cx="0" cy="-6" r="9" fill="#7a1616" stroke="#1a110a"/>
+          <path d="M-6 -6 q3 2 6 0" stroke="#d9b48a" stroke-width="1.5" fill="none"/>
+        </g>
+        <!-- Z del sonno -->
+        <g font-family="IM Fell English" fill="#efe4c8" opacity=".8">
+          <text x="140" y="165" font-size="16">z</text><text x="152" y="148" font-size="20">z</text><text x="166" y="126" font-size="26">Z</text>
+        </g>
+        <!-- impronte che lasciano la via -->
+        <g fill="#2b1d12" opacity=".6">
+          <ellipse cx="190" cy="236" rx="3" ry="5"/><ellipse cx="172" cy="226" rx="3" ry="5"/><ellipse cx="154" cy="214" rx="3" ry="5"/>
+        </g>
+      </svg></template>
+<template id="old8"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="albaCielo" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2b2a3a"/><stop offset="1" stop-color="#8c6a5a"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="260" fill="url(#albaCielo)"/>
+        <!-- colle -->
+        <path d="M140 260 Q220 40 300 60 Q360 80 400 200 V260Z" fill="#6b7a45" stroke="#2b1d12" stroke-width="1.5"/>
+        <path d="M200 140 Q240 120 270 130 M230 180 Q270 165 310 175" stroke="#4b5a2e" stroke-width="2" fill="none"/>
+        <!-- valle oscura (la selva) a sinistra -->
+        <path d="M0 140 Q80 200 170 240 L170 260 H0Z" fill="#0f150f"/>
+        <g fill="#0b100b">
+          <path d="M0 190 L18 120 L36 190Z"/><path d="M28 200 L50 115 L72 200Z"/><path d="M64 214 L86 140 L108 214Z"/><path d="M100 228 L120 165 L140 228Z"/>
+        </g>
+        <!-- personaggio ai piedi del colle -->
+        <g transform="translate(175 225)">
+          <path d="M-10 30 L-7 4 Q0 -3 7 4 L10 30Z" fill="#7a1616" stroke="#1a110a"/>
+          <circle cx="0" cy="-5" r="8" fill="#7a1616" stroke="#1a110a"/>
+        </g>
+        <!-- cuore trafitto dalla paura -->
+        <g transform="translate(60 60)">
+          <path d="M0 14 Q-24 -4 -12 -16 Q-4 -22 0 -12 Q4 -22 12 -16 Q24 -4 0 14Z" fill="#8b1e1e" stroke="#efe4c8" stroke-width="1"/>
+          <line x1="-22" y1="10" x2="22" y2="-14" stroke="#efe4c8" stroke-width="2"/>
+          <path d="M22 -14 l-8 0 l4 6Z" fill="#efe4c8"/>
+        </g>
+      </svg></template>
+<template id="old9"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cieloSole" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f6c453"/><stop offset="1" stop-color="#e9b872"/>
+          </linearGradient>
+          <linearGradient id="colleLuce" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e8c66a"/><stop offset=".35" stop-color="#8a9a50"/><stop offset="1" stop-color="#3e4a28"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="260" fill="url(#cieloSole)"/>
+        <!-- sole e raggi -->
+        <g transform="translate(270 40)">
+          <g stroke="#fff3c4" stroke-width="3" opacity=".8">
+            <line x1="0" y1="0" x2="-120" y2="70"/><line x1="0" y1="0" x2="-60" y2="100"/><line x1="0" y1="0" x2="20" y2="110"/>
+            <line x1="0" y1="0" x2="100" y2="70"/><line x1="0" y1="0" x2="-150" y2="20"/><line x1="0" y1="0" x2="120" y2="10"/>
+          </g>
+          <circle r="28" fill="#fff3c4" stroke="#f6c453" stroke-width="4"/>
+        </g>
+        <!-- colle con le spalle illuminate -->
+        <path d="M60 260 Q140 70 220 90 Q260 60 320 100 Q380 140 400 220 V260Z" fill="url(#colleLuce)" stroke="#2b1d12" stroke-width="1.5"/>
+        <path d="M150 120 Q190 88 220 92 Q260 62 318 100" stroke="#fff3c4" stroke-width="5" fill="none" opacity=".7"/>
+        <!-- buio in basso -->
+        <path d="M0 210 Q100 230 200 250 V260 H0Z" fill="#0f150f"/>
+        <!-- personaggio che guarda in alto, di spalle -->
+        <g transform="translate(110 215)">
+          <path d="M-12 40 L-9 6 Q0 -2 9 6 L12 40Z" fill="#7a1616" stroke="#1a110a"/>
+          <circle cx="2" cy="-6" r="9" fill="#7a1616" stroke="#1a110a"/>
+          <path d="M9 10 Q22 -6 26 -18" stroke="#7a1616" stroke-width="5" stroke-linecap="round"/>
+        </g>
+        <path d="M118 200 Q160 160 200 120" stroke="#2b1d12" stroke-width="1" stroke-dasharray="3 4" fill="none" opacity=".6"/>
+      </svg></template>
+<template id="old10"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="notteAlba" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#1c2233"/><stop offset="1" stop-color="#e9b872"/>
+          </linearGradient>
+          <clipPath id="cuoreClip">
+            <path d="M200 230 Q70 150 110 80 Q150 30 200 85 Q250 30 290 80 Q330 150 200 230Z"/>
+          </clipPath>
+        </defs>
+        <rect width="400" height="260" fill="url(#notteAlba)"/>
+        <!-- luna che tramonta e sole che sorge -->
+        <circle cx="40" cy="60" r="16" fill="#efe4c8" opacity=".6"/>
+        <circle cx="370" cy="60" r="20" fill="#fff3c4"/>
+        <!-- cuore con il lago dentro -->
+        <g clip-path="url(#cuoreClip)">
+          <rect x="60" y="20" width="280" height="220" fill="#e9c98a"/>
+          <rect x="60" y="130" width="280" height="110" fill="#3f6a7a"/>
+          <g stroke="#cfe3e6" stroke-width="2" fill="none" opacity=".8">
+            <path d="M110 150 q15 -4 30 0 q15 4 30 0"/><path d="M200 165 q15 -4 30 0 q15 4 30 0"/>
+            <path d="M140 185 q15 -4 30 0 q15 4 30 0"/><path d="M180 205 q10 -3 20 0"/>
+          </g>
+          <!-- riflesso del sole -->
+          <ellipse cx="240" cy="140" rx="30" ry="4" fill="#fff3c4" opacity=".7"/>
+          <!-- barchetta tranquilla -->
+          <path d="M170 140 L210 140 L202 150 L178 150Z" fill="#5c4422"/>
+          <line x1="190" y1="140" x2="190" y2="115" stroke="#2b1d12" stroke-width="2"/>
+          <path d="M190 116 L206 136 L190 136Z" fill="#efe4c8"/>
+        </g>
+        <path d="M200 230 Q70 150 110 80 Q150 30 200 85 Q250 30 290 80 Q330 150 200 230Z" fill="none" stroke="#8b1e1e" stroke-width="5"/>
+      </svg></template>
+<template id="old11"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="260" fill="#7d8c96"/>
+        <path d="M0 0 H400 V60 Q300 40 200 70 T0 50Z" fill="#4c5560"/>
+        <!-- mare in tempesta -->
+        <path d="M0 110 Q30 90 60 110 T120 110 T180 110 T240 110 V260 H0Z" fill="#1f3a4a"/>
+        <g fill="#efe4c8" opacity=".8">
+          <path d="M20 105 q10 -12 20 0 q-10 -4 -20 0Z"/><path d="M80 112 q10 -12 20 0 q-10 -4 -20 0Z"/>
+          <path d="M140 104 q10 -12 20 0 q-10 -4 -20 0Z"/><path d="M200 110 q10 -12 20 0 q-10 -4 -20 0Z"/>
+        </g>
+        <g stroke="#3f6a7a" stroke-width="3" fill="none">
+          <path d="M10 150 q20 -14 40 0 t40 0 t40 0 t40 0"/><path d="M0 190 q20 -14 40 0 t40 0 t40 0 t40 0 t40 0"/>
+          <path d="M20 230 q20 -14 40 0 t40 0 t40 0 t40 0"/>
+        </g>
+        <!-- relitto -->
+        <g transform="translate(70 170) rotate(-20)" fill="#3a2a1c">
+          <rect x="-30" y="-4" width="60" height="8"/><rect x="-4" y="-40" width="5" height="40"/>
+        </g>
+        <!-- riva -->
+        <path d="M230 260 Q250 150 300 140 Q360 130 400 140 V260Z" fill="#d9c08a" stroke="#8a6f3e" stroke-width="2"/>
+        <path d="M230 260 Q245 190 270 175" stroke="#cfe3e6" stroke-width="3" fill="none" opacity=".7"/>
+        <!-- naufrago affannato, chino, che si volta a guardare -->
+        <g transform="translate(310 150)">
+          <path d="M-14 0 Q-30 -10 -26 -30 Q0 -40 18 -24 L20 0Z" fill="#7a1616" stroke="#1a110a"/>
+          <circle cx="-30" cy="-34" r="9" fill="#d9b48a" stroke="#1a110a"/>
+          <path d="M-20 -6 L-34 6 M14 0 L20 14 M-6 0 L-2 14" stroke="#7a1616" stroke-width="5" stroke-linecap="round"/>
+          <!-- affanno -->
+          <g stroke="#efe4c8" stroke-width="1.5" fill="none" opacity=".8">
+            <path d="M-44 -38 q-6 -2 -10 2"/><path d="M-46 -30 q-8 0 -12 4"/>
+          </g>
+        </g>
+        <!-- gocce -->
+        <g fill="#cfe3e6"><circle cx="300" cy="170" r="2"/><circle cx="318" cy="168" r="1.6"/><circle cx="290" cy="160" r="1.4"/></g>
+      </svg></template>
+<template id="old12"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="gola" cx="30%" cy="60%" r="50%">
+            <stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#1f2a1e"/>
+          </radialGradient>
+        </defs>
+        <rect width="400" height="260" fill="#c9a86a"/>
+        <!-- la selva/passo oscuro a sinistra -->
+        <path d="M0 0 H210 Q180 80 200 260 H0Z" fill="url(#gola)"/>
+        <g fill="#0b100b">
+          <path d="M150 260 L175 120 L200 260Z"/><path d="M170 80 L190 0 L210 80Z"/><path d="M0 60 L20 0 L40 60Z"/>
+        </g>
+        <!-- anime/spiriti senza ritorno -->
+        <g fill="#efe4c8" opacity=".18">
+          <path d="M60 180 Q50 120 70 110 Q90 120 80 180 Q75 170 70 182 Q65 170 60 180Z"/>
+          <path d="M110 150 Q102 100 118 92 Q134 100 126 150 Q122 142 118 152 Q114 142 110 150Z"/>
+          <path d="M30 120 Q24 80 38 74 Q52 80 46 120 Q42 112 38 122 Q34 112 30 120Z"/>
+        </g>
+        <!-- linea di confine: impronte che escono -->
+        <g fill="#5c4422" opacity=".7">
+          <ellipse cx="225" cy="230" rx="4" ry="6"/><ellipse cx="245" cy="220" rx="4" ry="6"/><ellipse cx="265" cy="212" rx="4" ry="6"/>
+        </g>
+        <!-- Dante che si volta indietro -->
+        <g transform="translate(300 170)">
+          <path d="M-18 60 L-14 6 Q0 -4 14 6 L18 60Z" fill="#7a1616" stroke="#1a110a" stroke-width="1.5"/>
+          <path d="M-14 0 Q-16 -30 0 -32 Q16 -30 14 0 Q0 6 -14 0Z" fill="#7a1616" stroke="#1a110a" stroke-width="1.5"/>
+          <path d="M-14 -4 Q-20 -18 -10 -24 Q-6 -10 -14 -4Z" fill="#d9b48a"/>
+          <path d="M-14 16 Q-30 20 -40 10" stroke="#7a1616" stroke-width="6" stroke-linecap="round" fill="none"/>
+        </g>
+        <!-- anima che fugge ancora: piccola fiammella dietro di lui -->
+        <path d="M330 150 Q345 130 340 110 Q355 128 350 150 Q342 160 330 150Z" fill="#fff3c4" opacity=".8"/>
+        <path d="M352 140 q12 -2 22 -10 M352 150 q14 0 26 -6" stroke="#fff3c4" stroke-width="1.5" fill="none" opacity=".6"/>
+      </svg></template>
+<template id="old13"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="giorno" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f3d79a"/><stop offset="1" stop-color="#f6e2b4"/>
+          </linearGradient>
+        </defs>
+        <rect width="400" height="260" fill="url(#giorno)"/>
+        <circle cx="340" cy="45" r="22" fill="#fff3c4" stroke="#f6c453" stroke-width="3"/>
+        <!-- pendio deserto -->
+        <path d="M0 260 L0 230 L400 60 V260Z" fill="#c9a86a" stroke="#8a6f3e" stroke-width="2"/>
+        <g fill="#a98b55">
+          <ellipse cx="300" cy="140" rx="10" ry="4"/><ellipse cx="120" cy="215" rx="8" ry="3"/><ellipse cx="220" cy="180" rx="6" ry="3"/>
+        </g>
+        <!-- arbusto secco -->
+        <path d="M350 112 L350 96 M350 100 L342 90 M350 102 L358 92" stroke="#5c4422" stroke-width="2"/>
+        <!-- masso dove si è riposato -->
+        <ellipse cx="70" cy="226" rx="26" ry="12" fill="#8a7a62" stroke="#4a3a28" stroke-width="1.5"/>
+        <!-- impronte sulla salita -->
+        <g fill="#5c4422" opacity=".55">
+          <ellipse cx="110" cy="205" rx="4" ry="2.5"/><ellipse cx="140" cy="196" rx="4" ry="2.5"/>
+          <ellipse cx="170" cy="180" rx="4" ry="2.5"/><ellipse cx="200" cy="171" rx="4" ry="2.5"/>
+        </g>
+        <!-- Dante che sale: piede fermo più basso -->
+        <g transform="translate(240 140) rotate(-22)">
+          <path d="M-12 30 L-9 0 Q0 -8 9 0 L12 30Z" fill="#7a1616" stroke="#1a110a" stroke-width="1.5"/>
+          <path d="M-9 -4 Q-11 -26 0 -28 Q11 -26 9 -4 Q0 2 -9 -4Z" fill="#7a1616" stroke="#1a110a" stroke-width="1.5"/>
+          <path d="M-6 30 L-10 50" stroke="#2b1d12" stroke-width="5" stroke-linecap="round"/>
+          <path d="M6 30 L16 42" stroke="#2b1d12" stroke-width="5" stroke-linecap="round"/>
+          <line x1="12" y1="0" x2="22" y2="48" stroke="#4a3220" stroke-width="3"/>
+        </g>
+        <!-- freccia della salita -->
+        <path d="M260 90 Q300 70 330 66" stroke="#8b1e1e" stroke-width="2" fill="none" stroke-dasharray="5 4"/>
+        <path d="M330 66 l-10 -4 l2 9Z" fill="#8b1e1e"/>
+      </svg></template>
+
+<header>
+  <h1>La Divina Commedia</h1>
+  <p>Inferno · Canto I · in terzine</p>
+</header>
+<div class="progress"><div id="prog"></div></div>
+
+<div class="stage">
+  <div class="slide" id="slide">
+    <div class="tag" id="tag"></div>
+    <div class="pic" id="pic"></div>
+    <div class="verses" id="verses"></div>
+  </div>
+</div>
+
+<div class="bar">
+  <button id="prev" title="Indietro (←)">◀</button>
+  <span class="count" id="count"></span>
+  <button id="next" title="Avanti (→)">▶</button>
+  <button class="primary" id="play" title="Leggi (spazio)">🔊 Leggi</button>
+  <button class="toggle" id="auto" title="Legge e passa da sola alla terzina successiva">Lettura continua</button>
+  <select id="voice" title="Voce"></select>
+  <label class="rate">Velocità <input type="range" id="rate" min="0.6" max="1.3" step="0.05" value="0.9"></label>
+  <div class="note" id="note"></div>
+</div>
+
+<script>
+/* ===== Libreria di disegno ===== */
+const SK='#7a1616', INK='#2b1d12', SKIN='#d9b48a';
+function rnd(seed){let s=seed;return()=>{s=(s*9301+49297)%233280;return s/233280}}
+const bg=k=>`<rect width="400" height="260" fill="url(#g-${k})"/>`;
+function sun(x,y,r=22,rays=true){let s='';if(rays){s+=`<g stroke="#fff3c4" stroke-width="2.5" opacity=".75">`;for(let i=0;i<12;i++){const a=i*Math.PI/6;s+=`<line x1="${(x+Math.cos(a)*(r+6)).toFixed(1)}" y1="${(y+Math.sin(a)*(r+6)).toFixed(1)}" x2="${(x+Math.cos(a)*(r+20)).toFixed(1)}" y2="${(y+Math.sin(a)*(r+20)).toFixed(1)}"/>`}s+='</g>'}return s+`<circle cx="${x}" cy="${y}" r="${r}" fill="#fff3c4" stroke="#f6c453" stroke-width="4"/>`}
+const moon=(x,y,r=18)=>`<path d="M${x} ${y-r} A${r} ${r} 0 1 0 ${x} ${y+r} A${r*.7} ${r} 0 1 1 ${x} ${y-r}Z" fill="#efe4c8"/>`;
+function stars(n,seed=1,ymax=120,c='#efe4c8'){const r=rnd(seed);let s=`<g fill="${c}">`;for(let i=0;i<n;i++)s+=`<circle cx="${(r()*400).toFixed(1)}" cy="${(r()*ymax).toFixed(1)}" r="${(0.7+r()*1.2).toFixed(1)}"/>`;return s+'</g>'}
+function forest(x0,x1,base,h,col='#0f150f',n=8,seed=3){const r=rnd(seed);let s=`<g fill="${col}">`;const w=(x1-x0)/n;for(let i=0;i<n;i++){const cx=x0+w*i+w/2+(r()-.5)*w*.4;const hh=h*(.7+r()*.5);s+=`<path d="M${(cx-w*.75).toFixed(1)} ${base} L${cx.toFixed(1)} ${(base-hh).toFixed(1)} L${(cx+w*.75).toFixed(1)} ${base}Z"/>`}return s+'</g>'}
+function hill(lit=true,dim=false){return `<path d="M120 260 Q200 50 280 70 Q350 90 400 190 V260Z" fill="${lit?'url(#g-hill)':'#4b5a2e'}" stroke="${INK}" stroke-width="1.5" ${dim?'opacity=".55"':''}/>`+(lit&&!dim?`<path d="M178 118 Q222 62 280 72 Q330 80 360 120" stroke="#fff3c4" stroke-width="4" fill="none" opacity=".7"/>`:'')}
+const ground=(c='#9bb06a',y=205)=>`<path d="M0 ${y} Q200 ${y-14} 400 ${y} V260 H0Z" fill="${c}"/>`;
+const slope=(c='#c9a86a')=>`<path d="M0 260 L0 230 L400 90 V260Z" fill="${c}" stroke="#8a6f3e" stroke-width="2"/>`;
+const label=(x,y,t,size=14,c=INK,extra='')=>`<text x="${x}" y="${y}" text-anchor="middle" font-family="IM Fell English, serif" font-size="${size}" fill="${c}" ${extra}>${t}</text>`;
+function bubble(x,y,w,h,lines,tx,ty,size=14){let t='';lines.forEach((l,i)=>t+=`<text x="${x+w/2}" y="${(y+h/2+(i-(lines.length-1)/2)*(size+3)+size*.35).toFixed(1)}" text-anchor="middle" font-family="IM Fell English, serif" font-style="italic" font-size="${size}" fill="${INK}">${l}</text>`);
+  return `<path d="M${x+w*.4} ${y+h-2} L${tx} ${ty} L${x+w*.58} ${y+h-2}Z" fill="#f7f0d8" stroke="${INK}" stroke-width="1.5"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="#f7f0d8" stroke="${INK}" stroke-width="1.5"/><path d="M${x+w*.4+2} ${y+h-1} L${x+w*.58-2} ${y+h-1}" stroke="#f7f0d8" stroke-width="4"/>${t}`}
+const trem=(x,y,c='#efe4c8')=>`<g stroke="${c}" stroke-width="1.6" fill="none" opacity=".85"><path d="M${x-26} ${y} q-5 6 0 12 q5 6 0 12"/><path d="M${x+26} ${y} q5 6 0 12 q-5 6 0 12"/><path d="M${x-34} ${y+8} q-5 6 0 12"/><path d="M${x+34} ${y+8} q5 6 0 12"/></g>`;
+const tears=(x,y)=>`<g fill="#7fb3d5"><path d="M${x} ${y} q-3 6 0 8 q3 -2 0 -8Z"/><path d="M${x+3} ${y+11} q-3 6 0 8 q3 -2 0 -8Z"/></g>`;
+function arrow(x1,y1,x2,y2,c='#8b1e1e',curve=0){const mx=(x1+x2)/2,my=(y1+y2)/2-curve;const a=Math.atan2(y2-my,x2-mx),h=11;return `<path d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}" stroke="${c}" stroke-width="2.5" fill="none" stroke-dasharray="6 4"/><path d="M${x2} ${y2} L${(x2-h*Math.cos(a-0.45)).toFixed(1)} ${(y2-h*Math.sin(a-0.45)).toFixed(1)} L${(x2-h*Math.cos(a+0.45)).toFixed(1)} ${(y2-h*Math.sin(a+0.45)).toFixed(1)}Z" fill="${c}"/>`}
+function flowers(n,seed,y0,y1,x0=0,x1=400){const r=rnd(seed);const cs=['#f7f0d8','#e88aa0','#f6c453','#b99ae0'];let s='';for(let i=0;i<n;i++){const x=(x0+r()*(x1-x0)).toFixed(1),y=(y0+r()*(y1-y0)).toFixed(1);s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${+y+8}" stroke="#4b6b2a" stroke-width="1.5"/><circle cx="${x}" cy="${y}" r="3.2" fill="${cs[i%4]}"/><circle cx="${x}" cy="${y}" r="1.2" fill="#f6c453"/>`}return s}
+const birds=arr=>arr.map(([x,y,s=1])=>`<path d="M${x-8*s} ${y} Q${x-4*s} ${y-5*s} ${x} ${y} Q${x+4*s} ${y-5*s} ${x+8*s} ${y}" stroke="${INK}" stroke-width="1.5" fill="none"/>`).join('');
+const cloud=(x,y,s=1,c='#fffaf0',op=.92)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" opacity="${op}"><ellipse cx="0" cy="0" rx="42" ry="14"/><circle cx="-16" cy="-8" r="14"/><circle cx="8" cy="-12" r="18"/><circle cx="26" cy="-4" r="11"/></g>`;
+const bones=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="#e8dcc0" stroke="${INK}" stroke-width="1"><path d="M-8 0 Q-12 -14 0 -16 Q12 -14 8 0 L4 0 L4 4 L-4 4 L-4 0Z"/><circle cx="-3.5" cy="-8" r="2.5" fill="${INK}"/><circle cx="3.5" cy="-8" r="2.5" fill="${INK}"/><rect x="12" y="-2" width="22" height="4" rx="2" transform="rotate(-15 12 0)"/><rect x="-34" y="0" width="20" height="4" rx="2" transform="rotate(10 -34 0)"/></g>`;
+const coin=(x,y,r=6)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#e8c66a" stroke="#a07a20" stroke-width="1.5"/><circle cx="${x}" cy="${y}" r="${r*.55}" fill="none" stroke="#a07a20" stroke-width="1"/>`;
+const heart=(x,y,s=1,c='#8b1e1e')=>`<path transform="translate(${x} ${y}) scale(${s})" d="M0 14 Q-24 -4 -12 -16 Q-4 -22 0 -12 Q4 -22 12 -16 Q24 -4 0 14Z" fill="${c}" stroke="${INK}" stroke-width="1"/>`;
+const star=(x,y,r=10,c='#f6c453')=>{let d='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.45:r;d+=`${i?'L':'M'}${(x+Math.cos(a)*rr).toFixed(1)} ${(y+Math.sin(a)*rr).toFixed(1)}`}return `<path d="${d}Z" fill="${c}" stroke="${INK}" stroke-width="1"/>`};
+const cross=(x,y,r=16)=>`<g stroke="#8b1e1e" stroke-width="4" stroke-linecap="round"><line x1="${x-r}" y1="${y-r}" x2="${x+r}" y2="${y+r}"/><line x1="${x+r}" y1="${y-r}" x2="${x-r}" y2="${y+r}"/></g>`;
+function book(x,y,s=1){let l='';for(let i=0;i<5;i++)l+=`<line x1="-38" y1="${-32+i*6}" x2="-8" y2="${-30+i*6}"/><line x1="8" y1="${-30+i*6}" x2="38" y2="${-32+i*6}"/>`;return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0 Q-20 -8 -44 -4 L-44 -40 Q-20 -44 0 -36Z" fill="#f7f0d8" stroke="${INK}" stroke-width="1.5"/><path d="M0 0 Q20 -8 44 -4 L44 -40 Q20 -44 0 -36Z" fill="#f7f0d8" stroke="${INK}" stroke-width="1.5"/><g stroke="${INK}" stroke-width="1" opacity=".55">${l}</g></g>`}
+function gate(x,y,s=1){return `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="-60" rx="90" ry="80" fill="#fff8e0" opacity=".55"/><rect x="-50" y="-120" width="100" height="120" fill="#c9a441" stroke="${INK}" stroke-width="2"/><path d="M-36 0 L-36 -80 Q0 -112 36 -80 L36 0Z" fill="#fff3c4" stroke="${INK}" stroke-width="2"/>${[-24,-12,0,12,24].map(v=>`<line x1="${v}" y1="0" x2="${v}" y2="${v==0?-96:-86}" stroke="#a07a20" stroke-width="3"/>`).join('')}<g transform="translate(0 -106)" stroke="#7a5a10" stroke-width="3" fill="none"><line x1="-12" y1="-6" x2="12" y2="6"/><line x1="-12" y1="6" x2="12" y2="-6"/><circle cx="-15" cy="-7" r="3.5"/><circle cx="-15" cy="7" r="3.5"/></g></g>`}
+function heavenCity(x,y,s=1){return `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="-50" rx="130" ry="80" fill="#fff8e0" opacity=".65"/><g fill="#e8c66a" stroke="#a07a20" stroke-width="1.5"><rect x="-70" y="-50" width="140" height="50"/><rect x="-60" y="-90" width="24" height="90"/><rect x="36" y="-90" width="24" height="90"/><rect x="-16" y="-110" width="32" height="110"/></g><g fill="#a07a20"><path d="M-60 -90 L-48 -106 L-36 -90Z"/><path d="M36 -90 L48 -106 L60 -90Z"/><path d="M-16 -110 L0 -132 L16 -110Z"/></g><path d="M-10 0 L-10 -24 Q0 -36 10 -24 L10 0Z" fill="#fff3c4"/></g>`}
+function throne(x,y,s=1){let r='';for(let i=0;i<16;i++){const a=i*Math.PI/8;r+=`<line x1="${(Math.cos(a)*40).toFixed(1)}" y1="${(-50+Math.sin(a)*40).toFixed(1)}" x2="${(Math.cos(a)*130).toFixed(1)}" y2="${(-50+Math.sin(a)*130).toFixed(1)}"/>`}
+  return `<g transform="translate(${x} ${y}) scale(${s})"><circle cx="0" cy="-50" r="80" fill="#fff8e0" opacity=".7"/><g stroke="#f6c453" stroke-width="2" opacity=".7">${r}</g><path d="M-26 0 L-26 -70 Q0 -98 26 -70 L26 0Z" fill="#e8c66a" stroke="#a07a20" stroke-width="2"/><rect x="-34" y="-30" width="68" height="10" fill="#c9a441" stroke="#a07a20"/><circle cx="0" cy="-60" r="12" fill="#fff"/><path d="M-12 -82 L-12 -94 L-6 -88 L0 -98 L6 -88 L12 -94 L12 -82Z" fill="#f6c453" stroke="#a07a20"/></g>`}
+function flames(x0,x1,base,h,seed=5){const r=rnd(seed);let s='';const n=Math.max(1,Math.round((x1-x0)/22));const w=(x1-x0)/n;for(let i=0;i<n;i++){const cx=x0+i*w+w/2;const hh=h*(.6+r()*.6);s+=`<path d="M${(cx-12).toFixed(1)} ${base} Q${(cx-14).toFixed(1)} ${(base-hh*.5).toFixed(1)} ${cx.toFixed(1)} ${(base-hh).toFixed(1)} Q${(cx+4).toFixed(1)} ${(base-hh*.5).toFixed(1)} ${(cx+12).toFixed(1)} ${base}Z" fill="#c0392b"/><path d="M${(cx-6).toFixed(1)} ${base} Q${(cx-6).toFixed(1)} ${(base-hh*.35).toFixed(1)} ${cx.toFixed(1)} ${(base-hh*.6).toFixed(1)} Q${(cx+3).toFixed(1)} ${(base-hh*.3).toFixed(1)} ${(cx+6).toFixed(1)} ${base}Z" fill="#f6c453"/>`}return s}
+const hellmouth=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-70 0 Q-70 -90 0 -96 Q70 -90 70 0Z" fill="#3a2a1c" stroke="${INK}" stroke-width="2"/><path d="M-50 0 Q-50 -66 0 -70 Q50 -66 50 0Z" fill="#1a0505"/>${flames(-46,46,0,50,9)}</g>`;
+function soul(x,y,s=1,o={}){const c=o.c||'#efe4c8',op=o.op||.45;const mouth=o.happy?`<path d="M-3 -19 Q0 -16 3 -19" stroke="#1a110a" stroke-width="1.2" fill="none"/>`:`<ellipse cx="0" cy="-19" rx="${o.scream?2.4:1.5}" ry="${o.scream?3.6:2.2}" fill="#1a110a"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})" opacity="${op}"><path d="M-8 0 Q-12 -30 0 -36 Q12 -30 8 0 Q5 -6 3 0 Q0 -6 -3 0 Q-5 -6 -8 0Z" fill="${c}"/><circle cx="-3" cy="-26" r="1.5" fill="#1a110a"/><circle cx="3" cy="-26" r="1.5" fill="#1a110a"/>${mouth}${o.arms?`<path d="M-8 -18 Q-16 -28 -14 -36 M8 -18 Q16 -28 14 -36" stroke="${c}" stroke-width="3" fill="none" stroke-linecap="round"/>`:''}</g>`}
+const city=(x,y,s=1,c='#6b5a45')=>{const bat=[[-70,-76],[-62,-76],[-54,-76],[-14,-92],[-6,-92],[2,-92],[10,-92],[44,-70],[52,-70],[60,-70],[68,-70]];return `<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="${INK}" stroke-width="1.5"><rect x="-80" y="-40" width="160" height="40"/><rect x="-70" y="-70" width="26" height="70"/><rect x="-14" y="-86" width="28" height="86"/><rect x="44" y="-64" width="26" height="64"/>${bat.map(([a,b])=>`<rect x="${a}" y="${b}" width="5" height="6"/>`).join('')}<path d="M-8 0 L-8 -18 Q0 -26 8 -18 L8 0Z" fill="#1a110a"/></g>`};
+const temple=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="#e8dcc0" stroke="${INK}" stroke-width="1.5"><path d="M-62 -80 L0 -106 L62 -80Z"/><rect x="-64" y="-80" width="128" height="8"/>${[-50,-30,-10,10,30,50].map(c=>`<rect x="${c-4}" y="-72" width="8" height="64"/>`).join('')}<rect x="-68" y="-8" width="136" height="8"/></g>`;
+const house=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" stroke="${INK}" stroke-width="1"><rect x="-12" y="-18" width="24" height="18" fill="#c9a86a"/><path d="M-15 -18 L0 -30 L15 -18Z" fill="#8b3a2a"/><rect x="-3" y="-9" width="6" height="9" fill="#3a2a1c"/></g>`;
+const shield=(x,y,name)=>`<line x1="${x+12}" y1="${y+4}" x2="${x+16}" y2="${y-70}" stroke="#5c4422" stroke-width="3"/><path d="M${x+16} ${y-70} l-4 -12 l8 0Z" fill="#9c9a90"/><path d="M${x-16} ${y-50} L${x+16} ${y-50} L${x+16} ${y-24} Q${x} ${y-4} ${x-16} ${y-24}Z" fill="#8b1e1e" stroke="${INK}" stroke-width="1.5"/><path d="M${x} ${y-46} L${x} ${y-16}" stroke="#e8c66a" stroke-width="3"/>${label(x,y+18,name,13)}`;
+const sil=s=>`<g style="filter:brightness(0)" opacity=".55">${s}</g>`;
+
+/* Personaggi (origine: piedi, rivolti a destra) */
+function figure(x,y,s=1,o={}){const f=o.flip?-1:1,p=o.pose||'stand',k=o.kneel?14:0,R=o.robe||SK,H=o.head||'hood';
+  const arms={stand:['M8 -34 Q14 -22 12 -12',12,-12],point:['M8 -34 L32 -40',33,-40],fear:['M8 -34 Q20 -44 10 -54',10,-55],pray:['M8 -34 Q22 -34 22 -46',22,-47],up:['M8 -34 Q18 -50 22 -64',22,-65],back:['M-8 -34 Q-24 -36 -34 -44',-35,-44],open:['M8 -34 Q24 -30 30 -38',31,-39],lead:['M8 -34 L30 -30',31,-30]};
+  const a=arms[p];let head='';
+  if(H==='hood')head=`<path d="M-10 -40 Q-12 -68 0 -70 Q12 -68 10 -40 Q0 -36 -10 -40Z" fill="${o.hoodc||R}" stroke="#1a110a" stroke-width="1.5"/><path d="M2 -44 Q10 -46 10 -52 L12 -54 L9 -58 Q6 -64 0 -60 Q-1 -52 2 -44Z" fill="${SKIN}"/><circle cx="6" cy="-56" r="1" fill="${INK}"/>${o.blush?`<circle cx="6" cy="-49" r="2.5" fill="#e88aa0" opacity=".8"/>`:''}`;
+  else{head=`<circle cx="0" cy="-52" r="10" fill="${SKIN}" stroke="#1a110a"/><circle cx="5" cy="-54" r="1" fill="${INK}"/>`;
+    if(H==='laurel')head+=`<path d="M-11 -56 Q0 -66 11 -56" stroke="${o.laurelc||'#4b6b2a'}" stroke-width="3.5" fill="none" stroke-dasharray="4 2"/>`;
+    if(H==='veil')head=`<path d="M-14 -30 Q-16 -68 0 -68 Q16 -68 14 -30Z" fill="#f7f0d8" stroke="#c9ab72"/>`+head+`<path d="M-10 -59 Q0 -68 10 -59" stroke="#4b6b2a" stroke-width="3" fill="none" stroke-dasharray="3 2"/>`;
+    if(H==='hair')head+=`<path d="M-10 -54 Q-8 -64 0 -63 Q8 -64 10 -56 Q4 -60 -10 -54Z" fill="#3a2a1c"/>`;}
+  const mantle=o.mantle?`<path d="M-14 ${-k} L-11 -38 Q-4 -42 0 -38 L-2 ${-k}Z" fill="${o.mantle}" stroke="#1a110a" stroke-width="1"/>`:'';
+  return `<g transform="translate(${x} ${y}) rotate(${o.rot||0}) scale(${s*f} ${s})" ${o.op?`opacity="${o.op}"`:''}>${o.glow?`<ellipse cx="0" cy="-38" rx="38" ry="54" fill="${o.glow}" opacity=".5"/>`:''}<g transform="translate(0 ${k})"><path d="M-14 ${-k} L-11 -38 Q0 -46 11 -38 L14 ${-k}Z" fill="${R}" stroke="#1a110a" stroke-width="1.5"/>${mantle}${head}<path d="${a[0]}" stroke="${R}" stroke-width="6" stroke-linecap="round" fill="none"/><circle cx="${a[1]}" cy="${a[2]}" r="3" fill="${SKIN}"/></g></g>`}
+const dante=(x,y,s=1,o={})=>figure(x,y,s,o);
+function virgil(x,y,s=1,o={}){const f=o.flip?-1:1,p=o.pose||'stand',op=o.ghost?0.42:0.95;
+  const arms={stand:['M8 -36 Q14 -24 12 -14',12,-14],point:['M8 -36 L34 -48',35,-49],open:['M8 -36 Q24 -30 30 -40',31,-41],lead:['M8 -36 L32 -30',33,-30],up:['M8 -36 Q18 -52 22 -66',22,-67]};const a=arms[p];
+  return `<g transform="translate(${x} ${y}) scale(${s*f} ${s})" opacity="${op}"><ellipse cx="0" cy="-40" rx="30" ry="48" fill="#dfe8ee" opacity=".3"/><path d="M-15 0 L-12 -40 Q0 -48 12 -40 L15 0Z" fill="#b8c4cc" stroke="#3b4a55" stroke-width="1.5"/><path d="M-12 -40 L10 -6" stroke="#8a9aa6" stroke-width="5"/><circle cx="0" cy="-54" r="11" fill="${SKIN}" stroke="#3b4a55"/><path d="M-6 -50 Q2 -34 11 -50 Q4 -45 -6 -50Z" fill="#f2f2f2"/><path d="M-11 -57 Q-10 -68 0 -66 Q10 -68 11 -58" fill="#f2f2f2"/><path d="M-12 -60 Q0 -71 12 -60" stroke="#4b6b2a" stroke-width="3.5" fill="none" stroke-dasharray="4 2"/><circle cx="5" cy="-56" r="1.1" fill="${INK}"/><path d="${a[0]}" stroke="#b8c4cc" stroke-width="6" stroke-linecap="round" fill="none"/><circle cx="${a[1]}" cy="${a[2]}" r="3" fill="${SKIN}"/></g>`}
+const beast=(x,y,s,o,inner)=>`<g transform="translate(${x} ${y}) rotate(${o.rot||0}) scale(${s*(o.flip?-1:1)} ${s})">${inner}</g>`;
+function lonza(x,y,s=1,o={}){let sp='';const r=rnd(7);for(let i=0;i<16;i++)sp+=`<circle cx="${(-34+r()*72).toFixed(1)}" cy="${(-36+r()*18).toFixed(1)}" r="${(1.5+r()*1.8).toFixed(1)}"/>`;
+  return beast(x,y,s,o,`<path d="M-38 -26 Q-58 -34 -64 -54" stroke="#d9a441" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M-40 -22 Q-34 -42 0 -40 Q30 -42 40 -30 L46 -36 Q60 -44 64 -32 Q62 -20 50 -20 L44 0 L38 0 L36 -16 Q10 -12 -20 -16 L-26 0 L-32 0 L-34 -18 Z" fill="#d9a441" stroke="${INK}" stroke-width="1.5"/><g fill="#3a2a1c">${sp}<circle cx="56" cy="-32" r="1.8"/></g><path d="M50 -40 L52 -47 L56 -40Z" fill="#d9a441" stroke="${INK}"/>`)}
+function leone(x,y,s=1,o={}){let m='';for(let i=0;i<16;i++){const a=i*Math.PI/8;m+=`${i?'L':'M'}${(46+Math.cos(a)*(i%2?18:27)).toFixed(1)} ${(-46+Math.sin(a)*(i%2?18:27)).toFixed(1)} `}
+  return beast(x,y,s,o,`<path d="M-40 -26 Q-58 -20 -62 -40" stroke="#c8953c" stroke-width="4" fill="none"/><circle cx="-62" cy="-42" r="5" fill="#8a5a22"/><path d="M-44 -24 Q-40 -46 0 -44 Q30 -46 40 -36 L42 0 L34 0 L32 -18 Q0 -14 -30 -18 L-32 0 L-40 0Z" fill="#c8953c" stroke="${INK}" stroke-width="1.5"/><path d="${m}Z" fill="#8a5a22" stroke="${INK}"/><circle cx="50" cy="-46" r="13" fill="#d9a441" stroke="${INK}"/><circle cx="54" cy="-50" r="1.8" fill="${INK}"/><path d="M56 -42 L69 -40 L58 -35Z" fill="#8b1e1e" stroke="${INK}"/>`)}
+function lupa(x,y,s=1,o={}){return beast(x,y,s,o,`<path d="M-36 -24 Q-52 -18 -56 -2" stroke="#6d6a62" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M-38 -22 Q-30 -36 0 -30 Q22 -36 34 -34 L46 -44 L50 -52 L54 -42 L66 -32 L50 -26 L40 -24 L38 0 L33 0 L31 -18 Q0 -12 -26 -18 L-30 0 L-35 0Z" fill="#7d7a72" stroke="${INK}" stroke-width="1.5"/><g stroke="#4a4740" stroke-width="1.5" fill="none"><path d="M-6 -30 Q-8 -22 -4 -16"/><path d="M2 -30 Q0 -22 4 -16"/><path d="M10 -31 Q8 -23 12 -17"/><path d="M18 -32 Q16 -24 20 -18"/></g><circle cx="52" cy="-38" r="2.2" fill="#e8d36a"/><path d="M60 -30 L64 -26 L58 -27Z" fill="#efe4c8"/>`)}
+function veltro(x,y,s=1,o={}){return beast(x,y,s,o,`<ellipse cx="0" cy="-26" rx="74" ry="44" fill="#fff3c4" opacity=".4"/><path d="M-38 -26 Q-56 -30 -60 -10" stroke="#f4efe2" stroke-width="3" fill="none"/><path d="M-40 -24 Q-30 -40 -4 -34 Q14 -26 30 -32 L44 -46 L58 -40 L68 -38 L56 -34 L44 -30 L36 -18 L42 0 L37 0 L28 -16 Q4 -14 -24 -20 L-34 0 L-39 0 L-34 -18Z" fill="#f4efe2" stroke="${INK}" stroke-width="1.5"/><path d="M46 -44 L40 -51 L50 -46Z" fill="#f4efe2" stroke="${INK}"/><circle cx="52" cy="-41" r="1.6" fill="${INK}"/>`)}
+const fountain=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="0" rx="50" ry="10" fill="#8a7a62" stroke="${INK}"/><rect x="-6" y="-46" width="12" height="44" fill="#bfb5a0" stroke="${INK}"/><ellipse cx="0" cy="-46" rx="26" ry="6" fill="#bfb5a0" stroke="${INK}"/><path d="M0 -50 Q-4 -80 0 -86 Q4 -80 0 -50" fill="#7fb3d5"/><g stroke="#7fb3d5" stroke-width="3" fill="none"><path d="M0 -78 Q-30 -78 -34 -42 Q-36 -20 -44 -4"/><path d="M0 -78 Q30 -78 34 -42 Q36 -20 44 -4"/></g></g>`;
+const purg=(x,y,s=1)=>{let t='';for(let i=1;i<=6;i++){const h=26*i,w=120-0.6*h;t+=`<line x1="${-w}" y1="${-h}" x2="${w}" y2="${-h}" stroke="#5a6a3e" stroke-width="2"/>`}return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-120 0 L-18 -170 L18 -170 L120 0Z" fill="#8a9a6a" stroke="${INK}" stroke-width="1.5"/>${t}<ellipse cx="0" cy="-172" rx="26" ry="7" fill="#a7c47a"/></g>`};
+
+/* ===== Scene: terzine 3–46 (le prime 10 riusano i disegni già fatti) ===== */
+const S = {};
+S[11]=()=>bg('morning')+sun(345,45,20)+slope()+arrow(330,120,280,128,'#8a6f3e',6)+dante(80,204,1.1,{pose:'fear'})+lonza(225,136,1.1,{flip:true,rot:12})+`<g stroke="#8a6f3e" stroke-width="2" opacity=".7"><line x1="300" y1="110" x2="330" y2="104"/><line x1="300" y1="122" x2="336" y2="118"/></g>`;
+S[12]=()=>bg('morning')+sun(345,45,20)+slope()+lonza(190,163,1.0,{flip:true})+dante(105,194,1.1,{flip:true})+arrow(70,120,140,118,'#8b1e1e',-18)+arrow(140,135,70,138,'#8b1e1e',18);
+S[13]=()=>bg('dawn')+stars(30,4,110)+`<g opacity=".35" fill="#fff3c4"><path d="M0 0 L60 0 L200 200 L120 200Z"/><path d="M0 0 L20 0 L60 200 L20 200Z" opacity=".6"/></g>`+sun(260,192,26)+`<path d="M0 200 Q100 180 200 196 Q300 210 400 192 V260 H0Z" fill="#3e4a28"/>`+`<g stroke="#fff3c4" stroke-width="1.2" opacity=".85"><polyline points="212,140 232,128 254,124 274,132 290,148" fill="none"/></g>`+[[212,140],[232,128],[254,124],[274,132],[290,148]].map(([a,b])=>star(a,b,5,'#fff3c4')).join('')+label(252,112,'Ariete',13,'#fff3c4','font-style="italic"')+dante(100,222,0.8,{pose:'up'});
+S[14]=()=>bg('day')+sun(330,50,22)+birds([[80,60],[110,48,.8],[200,70,1.2],[230,56,.7]])+ground('#9bb06a',195)+flowers(34,11,190,255)+lonza(270,206,0.75,{})+dante(110,226,1.1,{pose:'up'})+heart(150,120,0.8,'#e88aa0');
+S[15]=()=>bg('day')+sun(60,45,18)+ground('#9bb06a',200)+flowers(26,21,196,255,0,240)+`<path d="M330 205 L330 130" stroke="#5c4422" stroke-width="10"/><g fill="#f2b6c6">${[[310,120],[330,105],[352,118],[318,140],[346,138],[330,125]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="16"/>`).join('')}</g>`+dante(90,226,1.1,{pose:'fear'})+trem(90,160,INK)+leone(260,230,1.3,{flip:true});
+S[16]=()=>bg('storm')+`<g stroke="#efe4c8" stroke-width="2" fill="none" opacity=".5">${[40,70,100].map(y=>`<path d="M0 ${y} q20 -10 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0"/>`).join('')}</g>`+ground('#3e3526',215)+leone(240,232,1.7,{flip:true})+`<g stroke="#c8953c" stroke-width="2.5" opacity=".6"><line x1="350" y1="170" x2="390" y2="170"/><line x1="350" y1="190" x2="395" y2="190"/><line x1="345" y1="210" x2="385" y2="210"/></g>`+dante(70,232,0.9,{pose:'fear'})+trem(70,175);
+S[17]=()=>bg('dark')+ground('#1f1a14',210)+[40,80,300,340,370,120].map((x,i)=>figure(x,200+(i%2)*6,0.75,{robe:'#555049',head:'hair',pose:i%2?'fear':'stand',op:.35})).join('')+lupa(200,228,1.7,{flip:true})+label(200,40,'',10);
+S[18]=()=>bg('dusk')+`<g opacity=".3">${sun(285,40,18,false)}</g>`+hill(true,true)+`<ellipse cx="280" cy="80" rx="70" ry="26" fill="#1a110a" opacity=".45"/>`+arrow(130,150,250,80,'#efe4c8',10)+cross(195,110,12)+lupa(300,240,1.2,{flip:true})+dante(110,235,1.05,{kneel:true,pose:'fear'})+tears(117,180);
+S[19]=()=>bg('room')+`<rect x="0" y="215" width="400" height="45" fill="#4a3220"/>`+figure(140,228,1.25,{robe:'#3e5a3a',head:'hair',pose:'fear'})+tears(148,160)+`<path d="M180 228 Q178 200 196 196 Q214 200 212 228Z" fill="#8a6f3e" stroke="${INK}" stroke-width="1.5" transform="rotate(30 196 214)"/>`+[[225,230],[245,236],[268,232],[292,238],[316,234]].map(([a,b])=>coin(a,b)).join('')+`<ellipse cx="345" cy="240" rx="26" ry="8" fill="#0d0a08"/>`+`<g transform="translate(320 120)" stroke="${INK}" stroke-width="2"><rect x="-22" y="-44" width="44" height="6" fill="#5c4422"/><rect x="-22" y="38" width="44" height="6" fill="#5c4422"/><path d="M-16 -38 Q-16 -6 0 0 Q16 -6 16 -38Z M-16 38 Q-16 6 0 0 Q16 6 16 38Z" fill="#efe4c8" opacity=".85"/><path d="M-12 38 Q0 22 12 38Z" fill="#e8c66a" stroke="none"/><line x1="0" y1="0" x2="0" y2="32" stroke="#e8c66a" stroke-width="1.5"/></g>`;
+S[20]=()=>bg('dusk')+`<path d="M0 260 L0 215 L400 145 V260Z" fill="#6b5a35" stroke="${INK}" stroke-width="1.5"/><rect width="400" height="260" fill="url(#g-shadeL)"/>`+`<circle cx="60" cy="60" r="24" fill="#0d0a08" stroke="#c9a441" stroke-width="2"/>`+label(60,104,'il sol tace',12,'#efe4c8','font-style="italic"')+dante(150,189,1.05,{pose:'fear'})+lupa(260,170,1.15,{flip:true})+arrow(150,215,60,230,'#efe4c8',-6);
+S[21]=()=>bg('dark')+`<path d="M0 120 Q120 260 200 250 Q280 260 400 140 V260 H0Z" fill="#1f1a14"/>`+`<g stroke="#efe4c8" stroke-width="1.5" opacity=".5"><line x1="70" y1="90" x2="90" y2="120"/><line x1="90" y1="80" x2="110" y2="112"/></g>`+dante(130,190,1,{pose:'up',rot:-40})+virgil(300,235,1.15,{ghost:true,flip:true})+label(262,168,'…',22,'#dfe8ee');
+S[22]=()=>bg('desert')+`<path d="M0 200 Q100 180 200 205 Q300 225 400 195 V260 H0Z" fill="#d9b878"/><path d="M0 230 Q140 210 260 238 Q330 250 400 232 V260 H0Z" fill="#c9a060"/>`+dante(140,232,1.15,{kneel:true,pose:'pray'})+virgil(285,232,1.2,{flip:true})+bubble(24,32,190,46,['«Miserere di me!»'],148,150,16);
+S[23]=()=>bg('day')+ground('#9bb06a',200)+`<ellipse cx="330" cy="175" rx="70" ry="14" fill="#7fb3d5" stroke="${INK}"/>`+city(330,172,0.45)+label(330,205,'Mantova',13)+dante(80,232,1.05,{})+virgil(190,232,1.25,{flip:true,pose:'open'})+bubble(120,26,200,46,['«Non omo, omo già fui»'],188,148,15);
+S[24]=()=>bg('day')+ground('#c9a86a',205)+temple(110,212,1)+figure(80,198,0.55,{robe:'#bdb5a0',head:'hair',op:.85})+figure(140,198,0.55,{robe:'#bdb5a0',head:'hair',op:.85,flip:true})+label(110,90,'Roma',16)+virgil(230,235,1.05,{})+figure(320,235,1.25,{robe:'#5a2a6a',head:'laurel',laurelc:'#c9a441',pose:'open',flip:true})+label(320,254,'Augusto',13,'#efe4c8');
+S[25]=()=>bg('fire')+`<g fill="#5a5450" opacity=".6"><ellipse cx="80" cy="60" rx="50" ry="22"/><ellipse cx="140" cy="40" rx="60" ry="20"/></g>`+city(110,190,1.05,'#4a3a2c')+flames(30,200,130,36,3)+flames(90,135,104,30,8)+label(110,212,'Troia',15,'#efe4c8')+`<path d="M0 225 Q200 210 400 225 V260 H0Z" fill="#1f3a4a"/><g transform="translate(300 222)"><path d="M-36 0 L36 0 L26 14 L-26 14Z" fill="#5c4422" stroke="${INK}"/><line x1="0" y1="0" x2="0" y2="-50" stroke="${INK}" stroke-width="2"/><path d="M0 -48 Q26 -30 2 -6Z" fill="#efe4c8" stroke="${INK}"/></g>`+book(330,150,0.7)+label(330,108,'Eneide',13,'#efe4c8','font-style="italic"');
+S[26]=()=>bg('morning')+sun(300,50,18)+hill(true)+forest(0,130,235,110,'#0f150f',5,6)+`<path d="M0 235 Q200 220 400 235 V260 H0Z" fill="#3e4a28"/>`+dante(110,240,1,{flip:true})+virgil(200,240,1.15,{pose:'point'})+label(300,115,'dilettoso monte',13,INK,'font-style="italic"');
+S[27]=()=>bg('day')+ground('#9bb06a',200)+`<path d="M160 214 Q200 236 260 232 Q330 230 400 250 L400 260 L200 260 Q170 250 150 222Z" fill="#7fb3d5" stroke="${INK}"/>`+['p','a','r','o','l','e'].map((c,i)=>label(220+i*28,240+i*2.5,c,14,'#1f3a4a','font-style="italic"')).join('')+fountain(200,214,1.1)+dante(80,232,1.05,{blush:true})+virgil(330,214,1.1,{flip:true,pose:'open'});
+S[28]=()=>bg('room')+`<rect x="0" y="210" width="400" height="50" fill="#4a3220"/>`+`<circle cx="210" cy="160" r="70" fill="#f6c453" opacity=".22"/>`+book(210,215,1.7)+label(210,128,'ENEIDE',16,'#f6c453')+star(210,60,14)+label(210,95,'onore e lume',13,'#efe4c8','font-style="italic"')+dante(80,238,1.05,{pose:'point'})+heart(340,120,1.1)+`<rect x="330" y="170" width="12" height="40" fill="#efe4c8"/><path d="M336 150 Q344 162 336 170 Q328 162 336 150Z" fill="#f6c453"/>`;
+S[29]=()=>bg('day')+ground('#9bb06a',205)+dante(130,232,1.1,{kneel:true,pose:'pray'})+virgil(270,232,1.3,{flip:true})+`<g transform="translate(200 120) rotate(-30)"><path d="M0 0 Q6 -30 22 -44 Q14 -20 2 2Z" fill="#efe4c8" stroke="${INK}"/><line x1="2" y1="2" x2="-6" y2="16" stroke="${INK}" stroke-width="2"/></g>`+label(200,160,'lo bello stilo',13,INK,'font-style="italic"')+bubble(20,24,220,46,['«Tu se’ lo mio maestro»'],134,150,15);
+S[30]=()=>bg('dusk')+ground('#4a3a28',210)+virgil(80,234,1.2,{})+dante(195,234,1.1,{flip:true,pose:'back'})+trem(195,170)+lupa(330,234,1.05,{flip:true})+bubble(110,26,180,44,['«aiutami da lei!»'],190,150,15);
+S[31]=()=>bg('dusk')+`<path d="M0 260 L0 120 Q40 100 80 130 L120 260Z" fill="#5c4a38" stroke="${INK}"/><path d="M20 260 Q20 180 60 175 Q100 180 100 260Z" fill="#0d0a08"/>${[0,1,2,3].map(i=>`<line x1="${30+i*6}" y1="${240-i*14}" x2="${90-i*6}" y2="${240-i*14}" stroke="#3a2a1c" stroke-width="2"/>`).join('')}`+ground('#6b5a45',225)+virgil(220,238,1.2,{flip:true,pose:'point'})+dante(320,238,1.05,{flip:true})+tears(312,180)+label(150,140,'altro viaggio',13,'#efe4c8','font-style="italic"')+arrow(180,150,110,185,'#efe4c8',10);
+S[32]=()=>bg('dark')+`<path d="M170 260 L196 120 L204 120 L240 260Z" fill="#6b5a45"/>`+forest(0,170,200,120,'#0b100b',4,2)+forest(240,400,200,120,'#0b100b',4,9)+lupa(205,205,1.5,{})+bones(160,245,0.9)+bones(260,250,0.8)+bones(120,225,0.6);
+S[33]=()=>bg('dark')+ground('#1f1a14',215)+lupa(150,232,1.5,{})+`<path d="M250 222 Q280 246 310 222Z" fill="#5c4422" stroke="${INK}" stroke-width="1.5"/><ellipse cx="280" cy="222" rx="30" ry="6" fill="#2a1e14" stroke="${INK}"/>`+bones(340,238,0.7)+bones(370,232,0.6)+`<path d="M246 190 q4 6 0 10" stroke="#7fb3d5" stroke-width="2" fill="none"/><g stroke="#efe4c8" stroke-width="1.6" fill="none" opacity=".75"><path d="M140 210 q6 -4 12 0 t12 0"/><path d="M136 220 q6 -4 12 0 t12 0"/></g>`+`<circle cx="236" cy="150" r="5" fill="#efe4c8"/><circle cx="250" cy="134" r="8" fill="#efe4c8"/>`+`<ellipse cx="300" cy="96" rx="70" ry="38" fill="#efe4c8"/>`+label(300,92,'più fame',18)+label(300,112,'che pria',18);
+S[34]=()=>bg('hope')+ground('#2a2218',215)+sil(lonza(60,212,0.8,{})+leone(110,190,0.75,{flip:true})+lupa(40,180,0.7,{})+lonza(220,195,0.6,{flip:true}))+lupa(160,232,1.15,{})+veltro(325,232,1.15,{flip:true})+`<g stroke="#fff3c4" stroke-width="2" opacity=".7"><line x1="370" y1="160" x2="398" y2="150"/><line x1="372" y1="180" x2="400" y2="178"/></g>`;
+S[35]=()=>bg('day')+ground('#9bb06a',215)+veltro(200,232,1.3,{})+`<path d="M30 140 Q50 112 80 140Z" fill="#7a5a3a" stroke="${INK}"/>`+coin(64,170,10)+coin(84,176,8)+cross(60,150,30)+label(60,205,'terra · peltro',12)+book(305,110,0.55)+heart(285,150,0.8)+star(330,152,11)+label(305,190,'sapienza · amore · virtute',12)+label(200,40,'tra feltro e feltro',15,INK,'font-style="italic"');
+S[36]=()=>bg('morning')+sun(200,200,30)+`<path d="M0 200 Q200 180 400 200 V260 H0Z" fill="#8a9a50"/>`+veltro(200,198,0.5,{})+shield(60,225,'Cammilla')+shield(140,232,'Eurialo')+shield(260,232,'Turno')+shield(340,225,'Niso')+label(200,40,'umile Italia',16,INK,'font-style="italic"');
+S[37]=()=>bg('dusk')+[220,250,280,310,350].map((x,i)=>house(x,190-(i%2)*6,0.9)).join('')+ground('#4a3a28',200)+hellmouth(75,232,0.95)+`<path d="M110 236 q10 -8 20 0 t20 0 t10 -6" stroke="#4b6b2a" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="160" cy="230" r="3" fill="#4b6b2a"/>`+label(140,252,'invidia',11,'#efe4c8','font-style="italic"')+lupa(200,228,1.05,{flip:true})+veltro(320,228,1.05,{flip:true});
+S[38]=()=>bg('dusk')+`<path d="M280 260 L280 70 Q330 40 400 60 V260Z" fill="#4a3a2c" stroke="${INK}"/><path d="M310 230 L310 140 Q340 110 370 140 L370 230Z" fill="#0d0a08"/>`+label(340,100,'loco etterno',13,'#efe4c8','font-style="italic"')+`<path d="M0 230 L280 230 L310 230 V260 H0Z" fill="#6b5a45"/>`+dante(110,232,1.05,{})+virgil(210,232,1.2,{pose:'lead'})+arrow(240,200,300,190,'#efe4c8',6);
+S[39]=()=>bg('hell')+[[60,170,1.3,1],[120,150,1.1,0],[190,175,1.4,1],[260,148,1.1,0],[330,172,1.3,1],[150,210,1,1],[290,212,1,1]].map(([x,y,s,a])=>soul(x,y,s,{c:'#efd6c0',op:.75,scream:true,arms:!!a})).join('')+flames(0,400,260,90,13)+label(100,60,'Ahi!',20,'#f6c453')+label(300,52,'Ohimè!',20,'#f6c453')+label(200,34,'Ahi…',16,'#f6c453');
+S[40]=()=>bg('dawn')+sun(200,52,16)+`<g stroke="#fff3c4" stroke-width="2" opacity=".5"><line x1="200" y1="80" x2="140" y2="140"/><line x1="200" y1="80" x2="260" y2="140"/></g>`+purg(200,260,1)+[[150,234],[250,234],[170,208],[230,208],[190,182]].map(([x,y])=>flames(x-11,x+11,y,26,x)+soul(x,y-4,0.6,{happy:true,op:.9})).join('')+label(330,210,'contenti',13,INK,'font-style="italic"');
+S[41]=()=>bg('heaven')+cloud(80,60,1.2)+cloud(320,40,1)+cloud(200,140,1.8)+figure(200,130,1.15,{robe:'#b02a2a',mantle:'#3e7a3a',head:'veil',glow:'#fff3c4'})+`<path d="M0 225 Q200 210 400 225 V260 H0Z" fill="#c9a86a"/>`+virgil(70,240,1.05,{flip:true})+arrow(60,250,20,250,'#8a6f3e',0)+dante(300,240,1.05,{flip:true,pose:'up'});
+S[42]=()=>bg('heaven')+heavenCity(200,120,0.85)+cloud(60,140,1.4)+cloud(160,150,1.5)+cloud(260,145,1.5)+cloud(355,140,1.4)+`<rect x="0" y="175" width="400" height="85" fill="#2a1e14"/>`+virgil(200,248,1.2,{pose:'up'})+tears(206,190);
+S[43]=()=>bg('heaven')+throne(200,170,1)+cloud(70,190,1.5)+cloud(330,195,1.5)+cloud(200,225,2)+soul(90,140,0.9,{happy:true,op:.95,c:'#fff'})+arrow(90,160,140,110,'#c9a441',10)+label(200,252,'oh felice colui!',15,INK,'font-style="italic"');
+S[44]=()=>bg('dusk')+ground('#4a3a28',210)+`<rect width="400" height="260" fill="url(#g-shadeL)"/>`+sil(lupa(40,234,0.8,{}))+dante(150,234,1.1,{kneel:true,pose:'pray'})+virgil(280,234,1.25,{flip:true})+bubble(150,24,230,46,['«Poeta, io ti richeggio»'],160,150,15);
+S[45]=()=>bg('morning')+`<path d="M60 260 L200 120 L340 260Z" fill="#8a9a6a" stroke="${INK}" stroke-width="1.5"/>`+gate(200,124,0.5)+label(200,40,'la porta di san Pietro',13,INK,'font-style="italic"')+[[40,236],[70,244],[100,238],[60,222]].map(([x,y])=>soul(x,y,0.8,{op:.6,c:'#9a948a'})).join('')+label(70,212,'mesti',12,INK,'font-style="italic"')+virgil(300,240,0.95,{flip:true,pose:'point'})+dante(355,240,0.85,{flip:true});
+S[46]=()=>bg('sunset')+sun(340,170,30,false)+`<path d="M0 180 Q200 165 400 182 V260 H0Z" fill="#5c4a2c"/><path d="M60 260 L330 182 L345 182 L180 260Z" fill="#c9a86a" opacity=".8"/>`+virgil(250,218,0.95,{pose:'lead'})+dante(160,240,1.05,{})+[[120,252],[100,256]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="4" ry="2.5" fill="#3a2a1c" opacity=".6"/>`).join('')+label(330,40,'Fine del Canto I',15,'#2b1d12','font-style="italic"');
+
+
+const T=[
+["Nel mezzo del cammin di nostra vita","mi ritrovai per una selva oscura,","ché la diritta via era smarrita."],
+["Ahi quanto a dir qual era è cosa dura","esta selva selvaggia e aspra e forte","che nel pensier rinova la paura!"],
+["Tant’è amara che poco è più morte;","ma per trattar del ben ch’i’ vi trovai,","dirò de l’altre cose ch’i’ v’ho scorte."],
+["Io non so ben ridir com’i’ v’intrai,","tant’era pien di sonno a quel punto","che la verace via abbandonai."],
+["Ma poi ch’i’ fui al piè d’un colle giunto,","là dove terminava quella valle","che m’avea di paura il cor compunto,"],
+["guardai in alto e vidi le sue spalle","vestite già de’ raggi del pianeta","che mena dritto altrui per ogne calle."],
+["Allor fu la paura un poco queta,","che nel lago del cor m’era durata","la notte ch’i’ passai con tanta pieta."],
+["E come quei che con lena affannata,","uscito fuor del pelago a la riva,","si volge a l’acqua perigliosa e guata,"],
+["così l’animo mio, ch’ancor fuggiva,","si volse a retro a rimirar lo passo","che non lasciò già mai persona viva."],
+["Poi ch’èi posato un poco il corpo lasso,","ripresi via per la piaggia diserta,","sì che ’l piè fermo sempre era ’l più basso."],
+["Ed ecco, quasi al cominciar de l’erta,","una lonza leggera e presta molto,","che di pel macolato era coverta;"],
+["e non mi si partia dinanzi al volto,","anzi ’mpediva tanto il mio cammino,","ch’i’ fui per ritornar più volte vòlto."],
+["Temp’era dal principio del mattino,","e ’l sol montava ’n sù con quelle stelle","ch’eran con lui quando l’amor divino"],
+["mosse di prima quelle cose belle;","sì ch’a bene sperar m’era cagione","di quella fiera a la gaetta pelle"],
+["l’ora del tempo e la dolce stagione;","ma non sì che paura non mi desse","la vista che m’apparve d’un leone."],
+["Questi parea che contra me venisse","con la test’alta e con rabbiosa fame,","sì che parea che l’aere ne tremesse."],
+["Ed una lupa, che di tutte brame","sembiava carca ne la sua magrezza,","e molte genti fé già viver grame,"],
+["questa mi porse tanto di gravezza","con la paura ch’uscia di sua vista,","ch’io perdei la speranza de l’altezza."],
+["E qual è quei che volontieri acquista,","e giugne ’l tempo che perder lo face,","che ’n tutti suoi pensier piange e s’attrista;"],
+["tal mi fece la bestia sanza pace,","che, venendomi ’ncontro, a poco a poco","mi ripigneva là dove ’l sol tace."],
+["Mentre ch’i’ rovinava in basso loco,","dinanzi a li occhi mi si fu offerto","chi per lungo silenzio parea fioco."],
+["Quando vidi costui nel gran diserto,","«Miserere di me», gridai a lui,","«qual che tu sii, od ombra od omo certo!»."],
+["Rispuosemi: «Non omo, omo già fui,","e li parenti miei furon lombardi,","mantoani per patrïa ambedui."],
+["Nacqui sub Iulio, ancor che fosse tardi,","e vissi a Roma sotto ’l buono Augusto","nel tempo de li dèi falsi e bugiardi."],
+["Poeta fui, e cantai di quel giusto","figliuol d’Anchise che venne di Troia,","poi che ’l superbo Ilïón fu combusto."],
+["Ma tu perché ritorni a tanta noia?","perché non sali il dilettoso monte","ch’è principio e cagion di tutta gioia?»."],
+["«Or se’ tu quel Virgilio e quella fonte","che spandi di parlar sì largo fiume?»,","rispuos’io lui con vergognosa fronte."],
+["«O de li altri poeti onore e lume,","vagliami ’l lungo studio e ’l grande amore","che m’ha fatto cercar lo tuo volume."],
+["Tu se’ lo mio maestro e ’l mio autore,","tu se’ solo colui da cu’ io tolsi","lo bello stilo che m’ha fatto onore."],
+["Vedi la bestia per cu’ io mi volsi;","aiutami da lei, famoso saggio,","ch’ella mi fa tremar le vene e i polsi»."],
+["«A te convien tenere altro vïaggio»,","rispuose, poi che lagrimar mi vide,","«se vuo’ campar d’esto loco selvaggio;"],
+["ché questa bestia, per la qual tu gride,","non lascia altrui passar per la sua via,","ma tanto lo ’mpedisce che l’uccide;"],
+["e ha natura sì malvagia e ria,","che mai non empie la bramosa voglia,","e dopo ’l pasto ha più fame che pria."],
+["Molti son li animali a cui s’ammoglia,","e più saranno ancora, infin che ’l veltro","verrà, che la farà morir con doglia."],
+["Questi non ciberà terra né peltro,","ma sapïenza, amore e virtute,","e sua nazion sarà tra feltro e feltro."],
+["Di quella umile Italia fia salute","per cui morì la vergine Cammilla,","Eurialo e Turno e Niso di ferute."],
+["Questi la caccerà per ogne villa,","fin che l’avrà rimessa ne lo ’nferno,","là onde ’nvidia prima dipartilla."],
+["Ond’io per lo tuo me’ penso e discerno","che tu mi segui, e io sarò tua guida,","e trarrotti di qui per loco etterno;"],
+["ove udirai le disperate strida,","vedrai li antichi spiriti dolenti,","ch’a la seconda morte ciascun grida;"],
+["e vederai color che son contenti","nel foco, perché speran di venire","quando che sia a le beate genti."],
+["A le quai poi se tu vorrai salire,","anima fia a ciò più di me degna:","con lei ti lascerò nel mio partire;"],
+["ché quello imperador che là sù regna,","perch’i’ fu’ ribellante a la sua legge,","non vuol che ’n sua città per me si vegna."],
+["In tutte parti impera e quivi regge;","quivi è la sua città e l’alto seggio:","oh felice colui cu’ ivi elegge!»."],
+["E io a lui: «Poeta, io ti richeggio","per quello Dio che tu non conoscesti,","acciò ch’io fugga questo male e peggio,"],
+["che tu mi meni là dov’or dicesti,","sì ch’io veggia la porta di san Pietro","e color cui tu fai cotanto mesti»."],
+["Allor si mosse, e io li tenni dietro."]
+];
+
+/* disegni: terzine 1-2 = trittici dei primi sei versi; 3-10 = disegni già fatti; 11-46 = nuove scene */
+function svgFor(i){ // i: 1-based
+  const tpl=id=>document.getElementById(id).innerHTML;
+  if(i===1) return {tri:true, html:tpl('old0')+tpl('old1')+tpl('old2')};
+  if(i===2) return {tri:true, html:tpl('old3')+tpl('old4')+tpl('old5')};
+  if(i<=10) return {tri:false, html:tpl('old'+(i+3))};
+  return {tri:false, html:`<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">${S[i]()}</svg>`};
+}
+
+const $=id=>document.getElementById(id);
+let cur=0;
+function render(){
+  const i=cur+1, lines=T[cur], first=cur*3+1;
+  $('tag').textContent = (lines.length===3? `TERZINA ${i}` : 'VERSO FINALE') + `  ·  vv. ${first}${lines.length>1?'–'+(first+lines.length-1):''}`;
+  const p=svgFor(i); $('pic').className='pic'+(p.tri?' tri':''); $('pic').innerHTML=p.html;
+  $('verses').innerHTML=lines.map((l,k)=>`<div class="verse" id="v${k}"><span class="num">${first+k}</span><span class="txt">${l}</span></div>`).join('');
+  $('count').textContent=`${i} / ${T.length}`;
+  $('prog').style.width=(i/T.length*100)+'%';
+  $('prev').disabled=cur===0; $('next').disabled=cur===T.length-1;
+}
+function go(n,keepReading){
+  if(n<0||n>=T.length) return;
+  if(!keepReading) stop();
+  const s=$('slide'); s.classList.add('out');
+  setTimeout(()=>{cur=n;render();s.classList.remove('out'); if(keepReading) readSlide();},250);
+}
+
+/* ===== Voce (Web Speech API: in Chrome usa le voci Google) ===== */
+const synth=window.speechSynthesis; let voices=[], runId=0, reading=false, auto=false;
+function loadVoices(){
+  if(!synth) return;
+  voices=synth.getVoices();
+  const it=voices.filter(v=>(v.lang||'').toLowerCase().startsWith('it'));
+  const list=(it.length?it:voices).slice().sort((a,b)=>(/google/i.test(b.name))-(/google/i.test(a.name)));
+  const prev=$('voice').value;
+  $('voice').innerHTML=list.map(v=>`<option value="${v.name}">${v.name}${/google/i.test(v.name)?' ★':''}</option>`).join('');
+  if(prev && list.some(v=>v.name===prev)) $('voice').value=prev;
+  const hasGoogle=it.some(v=>/google/i.test(v.name));
+  $('note').textContent = !voices.length ? '' : hasGoogle ? 'Voce Google italiana attiva ★' :
+    'La voce “Google italiano” c’è solo in Google Chrome: apri la pagina con Chrome per sentirla. Ora si usa la voce italiana del sistema.';
+}
+if(synth){ loadVoices(); synth.onvoiceschanged=loadVoices; } else { $('note').textContent='Questo browser non supporta la lettura ad alta voce.'; }
+
+const clean=t=>t.replace(/[«»]/g,'').replace(/’/g,"'");
+function readSlide(){
+  if(!synth) return;
+  synth.cancel(); const id=++runId; reading=true; $('play').textContent='⏸ Ferma';
+  const lines=T[cur]; const v=voices.find(x=>x.name===$('voice').value);
+  const say=k=>{
+    if(id!==runId) return;
+    document.querySelectorAll('.verse').forEach(e=>e.classList.remove('on'));
+    if(k>=lines.length){
+      if(auto && cur<T.length-1){ setTimeout(()=>{ if(id===runId) go(cur+1,true); },900); }
+      else { reading=false; $('play').textContent='🔊 Leggi'; }
+      return;
+    }
+    $('v'+k).classList.add('on');
+    const u=new SpeechSynthesisUtterance(clean(lines[k]));
+    u.lang='it-IT'; if(v) u.voice=v; u.rate=+$('rate').value; u.pitch=0.95;
+    u.onend=()=>setTimeout(()=>say(k+1), k===lines.length-1?0:250);
+    u.onerror=e=>{ if(e.error!=='interrupted'&&e.error!=='canceled') say(k+1); };
+    synth.speak(u);
+  };
+  say(0);
+}
+function stop(){ runId++; reading=false; if(synth) synth.cancel(); $('play').textContent='🔊 Leggi'; document.querySelectorAll('.verse').forEach(e=>e.classList.remove('on')); }
+
+$('prev').onclick=()=>go(cur-1);
+$('next').onclick=()=>go(cur+1);
+$('play').onclick=()=> reading? stop() : readSlide();
+$('auto').onclick=()=>{ auto=!auto; $('auto').classList.toggle('on',auto); $('auto').textContent=auto?'Lettura continua ✓':'Lettura continua'; if(auto&&!reading) readSlide(); };
+$('voice').onchange=()=>{ if(reading) readSlide(); };
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT') return;
+  if(e.key==='ArrowRight') go(cur+1); else if(e.key==='ArrowLeft') go(cur-1);
+  else if(e.key===' '){ e.preventDefault(); reading?stop():readSlide(); }
+});
+let tx=null; document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{ if(tx===null) return; const d=e.changedTouches[0].clientX-tx; if(Math.abs(d)>60) go(cur+(d<0?1:-1)); tx=null; });
+render();
+</script>
+</body>
+</html>
